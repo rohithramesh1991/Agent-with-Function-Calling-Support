@@ -8,7 +8,7 @@ import gradio as gr
 # Load all tool modules via registry
 import tools
 from registry import available_functions, definitions
-from template import function_calling_prompt_template, system_prompt, slack_prompt
+from template import function_calling_prompt_template, system_prompt, slack_prompt, switch_to_answer_prompt
 
 console = Console()
 
@@ -81,96 +81,6 @@ def call_function(function_calls):
     result = available_functions[fn_name](**args)
     return [result]
 
-# def answer_question(question, fn_responses, messages=None, fn_calls=None):
-#     messages = messages or []
-#     full_messages = messages.copy()
-#     if fn_responses:
-#         # Attach the tool call as a "tool" message (use the name from fn_calls, not the response itself!)
-#         tool_name = fn_calls[0]["name"] if fn_calls and isinstance(fn_calls[0], dict) and "name" in fn_calls[0] else "tool"
-#         tool_content = (
-#             json.dumps(fn_responses[0], indent=2) if isinstance(fn_responses[0], dict)
-#             else str(fn_responses[0])
-#         )
-#         tool_msg = {
-#             "role": "tool",
-#             "name": tool_name,
-#             "content": tool_content
-#         }
-#         full_messages.append(tool_msg)
-
-#     # Now pass this whole message log to the model, plus system instructions
-#     formatted = format_messages(full_messages[-12:])  # Only last 12 messages for context
-#     full_prompt = (
-#         f"{system_prompt.strip()}\n\n"
-#         f"{slack_prompt.strip()}\n\n"
-#         f"{formatted}\n"
-#         f"User: {question}\n"
-#     )
-
-#     data = {
-#         "model": MODEL,
-#         "prompt": full_prompt,
-#         "stream": True
-#     }
-
-#     response = requests.post(OLLAMA_URL, headers=HEADERS, data=json.dumps(data), stream=True)
-#     answer = ""
-#     for line in response.iter_lines():
-#         if line:
-#             chunk = json.loads(line)
-#             answer += chunk.get("response", "")
-#     return answer
-
-# def answer_question(question, fn_responses, messages=None, fn_calls=None):
-#     messages = messages or []
-#     full_messages = messages.copy()
-#     if fn_responses:
-#         tool_name = fn_calls[0]["name"] if fn_calls and isinstance(fn_calls[0], dict) and "name" in fn_calls[0] else "tool"
-#         tool_content = (
-#             json.dumps(fn_responses[0], indent=2) if isinstance(fn_responses[0], dict)
-#             else str(fn_responses[0])
-#         )
-#         tool_msg = {
-#             "role": "tool",
-#             "name": tool_name,
-#             "content": tool_content
-#         }
-#         full_messages.append(tool_msg)
-
-#     formatted = format_messages(full_messages[-12:])
-
-#     # 🚨 THE MAGIC INSTRUCTION 🚨
-#     answer_instruction = (
-#         "\n---\n"
-#         "The previous tool call has been completed and its result is shown above.\n"
-#         "Now, based on the most recent tool result, answer the user's original question directly, using information from the tool output if needed.\n"
-#         "DO NOT suggest or call another tool. DO NOT output TOOL_CALLS or suggest another function call.\n"
-#         "If the tool result is not enough, say so politely and ask the user for clarification."
-#         "\n---\n"
-#     )
-
-#     full_prompt = (
-#         f"{system_prompt.strip()}\n\n"
-#         f"{slack_prompt.strip()}\n\n"
-#         f"{formatted}\n"
-#         f"{answer_instruction}"
-#         f"User question: {question}\n"
-#     )
-
-#     data = {
-#         "model": MODEL,
-#         "prompt": full_prompt,
-#         "stream": True
-#     }
-
-#     response = requests.post(OLLAMA_URL, headers=HEADERS, data=json.dumps(data), stream=True)
-#     answer = ""
-#     for line in response.iter_lines():
-#         if line:
-#             chunk = json.loads(line)
-#             answer += chunk.get("response", "")
-#     return answer
-
 def answer_question(question, fn_responses, messages=None):
     """
     After tool execution, instruct the LLM to answer using the latest tool result.
@@ -188,21 +98,11 @@ def answer_question(question, fn_responses, messages=None):
 
     formatted = format_messages(full_messages[-12:])
 
-    # --- KEY: Insert explicit instructions here ---
-    switch_to_answer = (
-        "\n---\n"
-        "The tool call has been completed and the result is shown above.\n"
-        "Now, using the tool result, answer the user's question directly.\n"
-        "Do NOT output any TOOL_CALLS or suggest another function call.\n"
-        "If you cannot answer, say so and ask the user for clarification.\n"
-        "---\n"
-    )
-
     full_prompt = (
         f"{system_prompt.strip()}\n\n"
         f"{slack_prompt.strip()}\n\n"
         f"{formatted}\n"
-        f"{switch_to_answer}"
+        f"{switch_to_answer_prompt}"
         f"User: {question}\n"
     )
 

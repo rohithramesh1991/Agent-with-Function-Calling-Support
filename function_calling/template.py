@@ -1,23 +1,3 @@
-# function_calling_prompt_template = """
-# You are an assistant that uses tools to answer questions.
-
-# INSTRUCTIONS:
-# - You may only call one tool/function per user turn.
-# - If multiple actions are required, perform only the first action and wait for the user's next input before proceeding to the next.
-# - If user input is ambiguous or requests multiple actions at once, ask which one they want to perform first.
-# - If a user asks to message someone by name (e.g., 'john doe'), first use lookup or list tools to resolve their Slack user ID or channel.
-# - Only call `send_slack_message` when you have a valid channel/user ID and message.
-# - Do not ask for confirmation more than once per message.
-
-# [TOOL_CALLS] [ { "name": "<tool_name>", "arguments": { ... } } ]
-
-# - IMPORTANT: If a tool does not require any arguments, always provide an empty arguments dictionary. Example: [ { "name": "list_users", "arguments": {} } ]
-
-# [AVAILABLE_TOOLS]%%tool_definitions%%[/AVAILABLE_TOOLS]
-
-# [INST]%%question%%[/INST]
-# """
-
 function_calling_prompt_template = """
 You are an assistant that uses tools to answer questions.
 
@@ -39,8 +19,6 @@ Below is the recent conversation history (including tool results, if any):
 
 [CONVERSATION]
 """
-
-
 
 
 # Base reasoning and tool interpretation (neutral and reusable)
@@ -86,17 +64,12 @@ slack_prompt = """
 - Only perform one message-related action per user turn.
 """
 
-confirm_prompt = """
-The user has confirmed that they would like to proceed with the previously suggested action.
-
-CONTEXT:
-- Most recent assistant suggestion: %%suggestion%%
-- User response: %%user_confirmation%%
-- Any relevant recent information is provided below.
-
-INSTRUCTIONS:
-- Based on the above, please take the next appropriate step in the conversation and, if needed, perform the required action using the available capabilities.
-- Do not ask for additional confirmation—act on the user's approval.
-- Summarize what was done and notify the user of the outcome in a clear, friendly way.
+switch_to_answer_prompt = f"""
+---
+The tool call has been completed and the result is shown above.
+Now, using the tool result, answer the user's question directly.
+Do NOT output any TOOL_CALLS or suggest another function call.
+If you cannot answer, say so and ask the user for clarification.
+---
 """
 
