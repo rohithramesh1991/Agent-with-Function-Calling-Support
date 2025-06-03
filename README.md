@@ -20,7 +20,6 @@ This assistant can execute function calls (tools) and answer user questions usin
 ```bash
 ### 1. **Clone the repository**
 
-
 git clone https://github.com/yourusername/chat-assistant.git
 cd chat-assistant
 
