@@ -17,10 +17,10 @@ This assistant can execute function calls (tools) and answer user questions usin
 ---
 
 ## Quick Start
-
+```bash
 ### 1. **Clone the repository**
 
-```bash
+
 git clone https://github.com/yourusername/chat-assistant.git
 cd chat-assistant
 
