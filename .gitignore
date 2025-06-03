@@ -1,0 +1,86 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+.Python
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables and secrets
+.env
+.env.*
+*.env
+
+# API keys and local config
+*.local
+*.secret
+secrets.json
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data, logs, and outputs
+*.log
+*.sqlite3
+*.db
+*.sqlite
+*.h5
+*.data
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.bak
+
+# Gradio generated files
+gradio_cached_examples/
+gradio_cached_examples/*
+
+# Node/npm (if using frontend)
+node_modules/
+
+# Coverage and test outputs
+htmlcov/
+.coverage
+.tox/
+.pytest_cache/
+
+# Build, dist, and egg-info
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# VS Code settings (optional)
+.settings/
+
+# Mac crap
+*.DS_Store
+
+# Windows crap
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Misc
+*.orig
+*.swp
+*.tmp
+
+
