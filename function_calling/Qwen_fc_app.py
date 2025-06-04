@@ -19,7 +19,7 @@ MODEL = "qwen2.5:latest"
 # New: Structured message object: role, name, content
 def format_messages(messages):
     """
-    Formats the chat history as a Tau-Bench-style message list:
+    Formats the chat history as a message list:
     Each message is a dict: {role: ..., content: ..., [name: ...]}
     """
     formatted = ""
