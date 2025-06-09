@@ -13,7 +13,7 @@ This assistant can execute function calls (tools) and answer user questions usin
 - **Tool/function-calling:** Structured function calls are parsed and executed via your custom registry.
 - **Rich chat interface:** Gradio frontend, with history, tool outputs, and user/assistant roles.
 - **Easily extensible:** Add new tools in `tools.py`, new prompts in `template.py`.
-- **This project requires access to the Slack API, AbuseIPDB API, and a weather API for full tool functionality.
+- This project requires access to the Slack API, AbuseIPDB API, and a weather API for full tool functionality.
 
 ---
 
